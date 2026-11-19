@@ -40,6 +40,9 @@ because the version changed underneath it.
 - `20:16:23Z` — nft and `ss` measured; `22` declared jumpbox, `53` declared dns; explicit egress
   rules for the API and the jumpbox. `fix_safe` true. **GREEN**, with an `E7` advisory.
 - `20:16:41Z` — the alarm reads **2 healthy**. **GREEN.**
+- `20:26:07Z` — the egress chain deleted; `E2` fails.
+- `20:26:32Z` — one repair cycle re-applied `E2`; the gate is **GREEN** again.
+- `20:26:58Z` — the five-minute timer's next cycle finds nothing to do.
 
 The red in the middle is the point. The package was fixed at `19:57`; the process was not. A
 version banner would have called that green. The contract did not.
@@ -79,6 +82,27 @@ hidden pass — the light is green and the warning is visible.
 
 A scanner would have said "close 22". A critic says "declare it, gate it, and show the advisory."
 
+## A response defense, not a flood
+
+The durable fix is systemd: a oneshot unit loads the nft chain at boot. The
+response is a bounded cycle on a five-minute timer:
+
+1. collect the view — one API probe, one TCP connect;
+2. map each FAIL to the smallest idempotent action: reload the egress, reload
+   the jail, restart onto the on-disk binary;
+3. apply at most two actions, with a 300-second cooldown per action;
+4. re-collect once and record the posture.
+
+There is no scan, no ping sweep and no mass ban. The only attacker-facing action
+is the jail's per-IP ban, which already has `maxretry` and `findtime`. The test
+was simple: delete the egress chain, run one cycle, and watch `E2` disappear and
+the gate return to green; a second cycle found nothing to do.
+
+Everything else escalates. `A1` is a config change, `E1` is another host,
+`I1/I2` are the jumpbox (do not close 22), `E7` is a firewall policy. A repair
+that tries to fix those automatically is not a defense; it is a second way to be
+wrong.
+
 ## Reproduce
 
 ```sh
@@ -87,6 +111,8 @@ python3 fix_contract.py --posture --raw <view>
 python3 fix_contract.py --serve $POSTURE_BIND --raw <view>
 ocd-smoke-alarm serve --config smoke-alarm-run.yaml --mode=headless
 hurl --test --variable base=$POSTURE_URL hurl/state.hurl
+/usr/local/sbin/le-roy-jenkins-cycle
+systemctl list-timers le-roy-jenkins-cycle.timer
 ```
 
 The view is collected read-only on the edge; the honeypot logs two streams — the legitimate API
