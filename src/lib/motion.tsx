@@ -1,0 +1,175 @@
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
+import { motion } from 'motion/react'
+import { useLocation } from 'react-router-dom'
+import { motionTokens } from '../components/silicon-ui/motion-tokens'
+import { PAGES } from './content'
+import { getSeed } from './seeds'
+
+/**
+ * The motion budget, set by the ladder.
+ *
+ * The seeds sit on a readiness scale. That scale is also a claim about attention:
+ * someone at rung 0 is deciding, not decorating, and an animated border on the
+ * page they are reading is friction rather than delight. So the default motion
+ * budget follows the rung —
+ *
+ *     rungs 0–1  still    no reveals, no counting numbers
+ *     rungs 2–3  calm     reveals and counters, no ambient loops
+ *     rung 4+    full     everything the design calls for
+ *
+ * — and the reader can override it in the header. The override is stored, because
+ * a preference that resets on navigation is not a preference. Reduced-motion is
+ * not an override: it wins, always.
+ *
+ * Silicon UI already honours `prefers-reduced-motion` inside its own components.
+ * This ladder is a second, product-level setting for readers who want less motion
+ * without telling their operating system about it; pages ask for the mode before
+ * they mount an animated component at all.
+ */
+export type MotionMode = 'still' | 'calm' | 'full'
+
+/**
+ * The modes this site actually implements.
+ *
+ * A copy of the seed that never added a `full`-only effect is still offering a
+ * control for it, and the control does nothing — which is worse than not having
+ * it. Declaring the modes here lets the toggle offer exactly these, so the
+ * control cannot lie about what the site does.
+ */
+export const MODES: MotionMode[] = ['still', 'calm', 'full']
+
+const STORAGE_KEY = 'legume.motion'
+
+type MotionState = {
+  /** the mode actually in force */
+  mode: MotionMode
+  /** what the ladder would choose, before any preference */
+  auto: MotionMode
+  /** null until the reader chooses */
+  explicit: MotionMode | null
+  setMode: (mode: MotionMode) => void
+  /** true when the OS asks for reduced motion; it pins mode to "still" */
+  reduced: boolean
+}
+
+const MotionContext = createContext<MotionState | null>(null)
+
+function isMode(value: string | null): value is MotionMode {
+  return value === 'still' || value === 'calm' || value === 'full'
+}
+
+export function MotionProvider({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation()
+
+  const [explicit, setExplicit] = useState<MotionMode | null>(() => {
+    if (typeof window === 'undefined') return null
+    const stored = window.localStorage.getItem(STORAGE_KEY)
+    return isMode(stored) ? stored : null
+  })
+
+  const [reduced, setReduced] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  })
+
+  useEffect(() => {
+    if (!window.matchMedia) return
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => setReduced(query.matches)
+    query.addEventListener('change', onChange)
+    return () => query.removeEventListener('change', onChange)
+  }, [])
+
+  const auto = useMemo<MotionMode>(() => {
+    const route = pathname.replace(/\/+$/, '') || '/'
+
+    // The catalogue exists to show motion; it is the one page that is allowed
+    // to be loud by default.
+    if (route === '/design') return 'full'
+
+    // A page's budget comes from the seeds it belongs to, taking the lowest rung
+    // so a page shared by two audiences is safe for both.
+    const seedId = route.startsWith('/seeds/') ? route.split('/')[2] : undefined
+    const page = PAGES.find((candidate) => `/${candidate.path}` === route)
+    const seedIds = seedId ? [seedId] : (page?.seeds ?? [])
+    const rungs = seedIds
+      .map((id) => getSeed(id)?.rung)
+      .filter((rung): rung is number => typeof rung === 'number')
+
+    // No seed: the home page, a section index, the 404. The front door serves
+    // every rung, so it gets the middle budget rather than the loudest.
+    if (!rungs.length) return 'calm'
+
+    const rung = Math.min(...rungs)
+    if (rung <= 1) return 'still'
+    if (rung <= 3) return 'calm'
+    return 'full'
+  }, [pathname])
+
+  const setMode = useCallback((mode: MotionMode) => {
+    setExplicit(mode)
+    try {
+      window.localStorage.setItem(STORAGE_KEY, mode)
+    } catch {
+      // Private browsing with storage disabled: the choice still applies this session.
+    }
+  }, [])
+
+  const mode: MotionMode = reduced ? 'still' : (explicit ?? auto)
+
+  return (
+    <MotionContext.Provider value={{ mode, auto, explicit, setMode, reduced }}>
+      {children}
+    </MotionContext.Provider>
+  )
+}
+
+export function useMotion(): MotionState {
+  const state = useContext(MotionContext)
+  if (!state) throw new Error('useMotion must be used inside <MotionProvider>')
+  return state
+}
+
+/**
+ * A block that fades up once, when it enters the viewport.
+ *
+ * Site-native rather than a library component: Silicon UI reveals type
+ * (`TextReveal`, `InViewTitle`), not arbitrary layout, and this site needs the
+ * wrapper. The timing comes from Silicon's motion tokens so it matches the
+ * components around it.
+ */
+export function MotionReveal({
+  delay = 0,
+  className,
+  children,
+}: {
+  delay?: number
+  className?: string
+  children: ReactNode
+}) {
+  const { mode } = useMotion()
+  if (mode === 'still') return <div className={className}>{children}</div>
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '0px 0px -12% 0px' }}
+      transition={{
+        duration: motionTokens.duration.expressive,
+        ease: [0.16, 1, 0.3, 1],
+        delay: delay / 1000,
+      }}
+    >
+      {children}
+    </motion.div>
+  )
+}

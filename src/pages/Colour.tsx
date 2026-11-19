@@ -1,0 +1,242 @@
+import { Link } from 'react-router-dom'
+import { usePageMeta } from '../lib/usePageMeta'
+import { contrast, grade } from '../lib/contrast'
+import palette from '../lib/palette.json'
+
+const { tokens, pairs, series } = palette as {
+  tokens: { name: string; hex: string; role: string; decorative?: boolean }[]
+  pairs: { fg: string; bg: string; min: number; note: string }[]
+  series: string[]
+}
+
+const byName = new Map(tokens.map((token) => [token.name, token]))
+const hexOf = (name: string) => byName.get(name)?.hex ?? '#000000'
+
+const gradeClass: Record<string, string> = {
+  AAA: 'text-secondary',
+  AA: 'text-body',
+  'AA large': 'text-muted',
+  fail: 'text-accent',
+}
+
+/**
+ * The colour page: every shade against every other, and the gradients the site
+ * actually paints. The point is to see a pair before it reaches a contrast
+ * audit, so a palette change is a decision with numbers attached rather than a
+ * surprise in a Lighthouse run.
+ */
+export function Colour() {
+  usePageMeta(
+    'Colour',
+    'Every shade against every other, with the contrast ratio and grade, plus the gradients the site paints.',
+  )
+
+  return (
+    <div className="mx-auto w-full max-w-5xl px-5 py-14 sm:px-8 sm:py-20">
+      <p className="text-xs tracking-[0.18em] text-accent uppercase">Colour</p>
+      <h1 className="mt-3 text-4xl font-semibold tracking-tight text-body sm:text-5xl">
+        Every shade, one page.
+      </h1>
+      <p className="mt-4 max-w-2xl text-lg leading-8 text-muted">
+        The palette as a matrix: each foreground against each background, the ratio computed with the
+        WCAG formula, and the grade it would earn. The build refuses a declared pair below its
+        minimum, so a shade that fights the contrast tests is caught here rather than in an audit.
+      </p>
+
+      <section className="mt-12">
+        <h2 className="text-xs tracking-[0.18em] text-muted uppercase">The tokens</h2>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {tokens.map((token) => (
+            <li key={token.name} className="rounded-xl border border-line bg-surface p-3">
+              <span
+                className="block h-12 w-full rounded-lg border border-line-soft"
+                style={{ backgroundColor: token.hex }}
+              />
+              <p className="mt-2 font-mono text-xs text-body">{token.name}</p>
+              <p className="font-mono text-[11px] text-muted">{token.hex}</p>
+              <p className="mt-1 text-[11px] leading-4 text-muted">{token.role}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-xs tracking-[0.18em] text-muted uppercase">Foreground against background</h2>
+        <div className="mt-4 overflow-x-auto rounded-xl border border-line">
+          <table className="w-full min-w-[640px] border-collapse text-left text-xs">
+            <thead>
+              <tr className="bg-surface">
+                <th scope="col" className="px-3 py-2 font-mono text-[11px] text-muted">
+                  text ↓ / ground →
+                </th>
+                {tokens.map((token) => (
+                  <th
+                    key={token.name}
+                    scope="col"
+                    className="px-2 py-2 font-mono text-[10px] font-normal text-muted"
+                  >
+                    {token.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tokens.map((fg) => (
+                <tr key={fg.name} className="border-t border-line-soft">
+                  <th scope="row" className="px-3 py-1.5 font-mono text-[11px] font-normal text-body">
+                    {fg.name}
+                  </th>
+                  {tokens.map((bg) => {
+                    const ratio = contrast(fg.hex, bg.hex)
+                    const mark = grade(ratio)
+                    return (
+                      <td
+                        key={bg.name}
+                        className="px-2 py-1.5 font-mono text-[11px]"
+                        style={{ backgroundColor: bg.hex }}
+                      >
+                        <span className={gradeClass[mark]} title={`${fg.name} on ${bg.name}`}>
+                          {ratio.toFixed(1)}
+                        </span>
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-muted">
+          Grade is from the ratio: 7.0+ AAA, 4.5+ AA, 3.0+ AA for large text only, below that a
+          failure. The colour of the number is the grade, not the text colour being measured.
+        </p>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-xs tracking-[0.18em] text-muted uppercase">Declared pairs</h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted">
+          These are the combinations the site actually paints, each with the minimum it must clear.
+          <code className="mx-1 rounded border border-line bg-surface-2 px-1.5 py-0.5 font-mono text-[0.85em] text-accent">
+            npm run contrast
+          </code>
+          fails the build when one drops below its floor.
+        </p>
+        <ul className="mt-4 divide-y divide-line-soft rounded-xl border border-line bg-surface">
+          {pairs.map((pair) => {
+            const ratio = contrast(hexOf(pair.fg), hexOf(pair.bg))
+            const mark = grade(ratio)
+            const passes = ratio >= pair.min
+            return (
+              <li
+                key={`${pair.fg}-${pair.bg}`}
+                className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2.5 text-sm"
+              >
+                <span className="font-mono text-xs text-body">
+                  {pair.fg} on {pair.bg}
+                </span>
+                <span className="font-mono text-xs text-muted">{ratio.toFixed(1)}:1</span>
+                <span className="font-mono text-[11px] text-muted">min {pair.min}</span>
+                <span className={`font-mono text-[11px] ${passes ? 'text-secondary' : 'text-accent'}`}>
+                  {passes ? mark : 'BELOW FLOOR'}
+                </span>
+                <span className="ml-auto text-xs text-muted">{pair.note}</span>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-xs tracking-[0.18em] text-muted uppercase">The series ladder</h2>
+        <p className="mt-2 max-w-2xl text-sm leading-7 text-muted">
+          A chart is not two inks on a page; it is two inks beside each other. Every ink above was
+          measured against the ground, which says nothing about whether one series can be told from
+          another — two greys can each be perfectly legible on white and still be one shape to the
+          eye. This is the measurement that decides: the ladder is ordered, and each step must clear
+          3:1 against the step before it, which is the non-text floor in WCAG 1.4.11.
+        </p>
+        <ul className="mt-4 divide-y divide-line-soft rounded-xl border border-line bg-surface">
+          {series.map((name, i) => {
+            const previous = i === 0 ? null : series[i - 1]
+            const ratio = previous ? contrast(hexOf(previous), hexOf(name)) : null
+            return (
+              <li key={name} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+                <span
+                  className="block h-8 w-16 shrink-0 rounded border border-line-soft"
+                  style={{ backgroundColor: hexOf(name) }}
+                />
+                <span className="font-mono text-xs text-body">{name}</span>
+                <span className="font-mono text-xs text-muted">{hexOf(name)}</span>
+                <span className="text-xs text-muted">{byName.get(name)?.role}</span>
+                {ratio !== null && (
+                  <span
+                    className={`ml-auto font-mono text-[11px] ${ratio >= 3 ? 'text-secondary' : 'text-accent'}`}
+                  >
+                    {ratio.toFixed(2)}:1 from {previous}
+                  </span>
+                )}
+              </li>
+            )
+          })}
+        </ul>
+        <p className="mt-2 max-w-2xl text-xs leading-6 text-muted">
+          Two greys is the most this ground will give: a third series cannot be a third step, because
+          the lightest fill that still clears 3:1 against white is already series-2. A third series
+          has to be a shape — an outline, a ring, a dash — which is how the charts draw export and
+          grid draw. The build's ink audit checks what ships, not what was declared, so a bar painted
+          at 70% opacity is measured at 70%.
+        </p>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-xs tracking-[0.18em] text-muted uppercase">Gradients</h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted">
+          A gradient has no single ratio. The number below is the worse of its two stops, which is the
+          one an audit will find first.
+        </p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          {[
+            {
+              label: 'accent sweep',
+              style: { backgroundImage: 'linear-gradient(90deg, #4b4b4b, #6b6b6b)' },
+              fg: '#ffffff',
+              stops: ['#4b4b4b', '#6b6b6b'],
+            },
+            {
+              label: 'code block',
+              style: { backgroundColor: '#f7f7f7' },
+              fg: '#1d1d1d',
+              stops: ['#f7f7f7', '#f7f7f7'],
+            },
+            {
+              label: 'surface wash',
+              style: { backgroundImage: 'linear-gradient(180deg, #ffffff, #f7f7f7)' },
+              fg: '#1d1d1d',
+              stops: ['#ffffff', '#f7f7f7'],
+            },
+          ].map((sample) => {
+            const worst = Math.min(...sample.stops.map((stop) => contrast(sample.fg, stop)))
+            const mark = grade(worst)
+            return (
+              <div key={sample.label} className="overflow-hidden rounded-xl border border-line">
+                <div className="flex h-24 items-center justify-center p-3" style={sample.style}>
+                  <span className="font-mono text-xs" style={{ color: sample.fg }}>
+                    {sample.label}
+                  </span>
+                </div>
+                <p className="bg-surface px-3 py-2 font-mono text-[11px] text-muted">
+                  worst {worst.toFixed(1)}:1 · <span className={gradeClass[mark]}>{mark}</span>
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
+      <p className="mt-12 text-sm text-muted">
+        The components and their props are on <Link className="text-accent underline decoration-accent/30 underline-offset-4" to="/design">/design</Link>;
+        the decision behind this palette is <a className="text-accent underline decoration-accent/30 underline-offset-4" href="/docs/palette">Ivory, dimmed</a>.
+      </p>
+    </div>
+  )
+}
