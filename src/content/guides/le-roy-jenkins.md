@@ -37,6 +37,9 @@ because the version changed underneath it.
 - `19:58:18Z` — the alarm reads **2 unhealthy**. **RED.**
 - `19:58:41Z` — `systemctl restart nginx`; on-disk and running both `1.30.7`.
 - `19:58:47Z` — `cve_safe` true, `fix_safe` false. **1 healthy / 1 unhealthy**. **YELLOW.**
+- `20:16:23Z` — nft and `ss` measured; `22` declared jumpbox, `53` declared dns; explicit egress
+  rules for the API and the jumpbox. `fix_safe` true. **GREEN**, with an `E7` advisory.
+- `20:16:41Z` — the alarm reads **2 healthy**. **GREEN.**
 
 The red in the middle is the point. The package was fixed at `19:57`; the process was not. A
 version banner would have called that green. The contract did not.
@@ -56,16 +59,25 @@ client. The signal had to move to the edge, where `$remote_addr` is the observed
 `X-Forwarded-For` is recorded but never trusted. A NAT collapse still means the edge can see the
 gateway; preserve the client address, or sit outside the NAT.
 
-## Why the gate stays yellow
+## Green without closing 22
 
-The CVE light is green after the restart. The upgrade gate is not:
+The first instinct was to close 22. That is wrong: 22 is the jumpbox port. The better model is a
+**declared exception gated on the capability** — 22 stays open, and the contract passes it only
+if the jumpbox is user-key-only (no resident key, no agent socket).
 
-- the ingress is nftables, not ufw, so the contract has no public-port view;
-- `22` is still world-open;
-- there is no explicit egress allow rule for the API tuple.
+The same move covers the rest:
 
-A critic that calls that green is a scanner with better typography. The gate opens when the
-firewall is measured and scoped, not when the version string moves.
+- the ingress is read from nftables and `ss` (Docker's own control plane excluded), so `22`, `53`
+  and `443` are measured, not guessed;
+- `22` is declared `jumpbox`, `53` is declared `dns`;
+- the egress has explicit `api` and `jumpbox` rules to the host, and `22` is allowed only under
+  the user-key gate.
+
+The gate goes **GREEN** with 22 still open. One advisory remains: `E7` notes the egress policy is
+`accept`, so the allow rules are declarative, not enforcing. That is a spectrum position, not a
+hidden pass — the light is green and the warning is visible.
+
+A scanner would have said "close 22". A critic says "declare it, gate it, and show the advisory."
 
 ## Reproduce
 
