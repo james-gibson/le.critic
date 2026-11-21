@@ -450,7 +450,17 @@ const rulesFile = await readText('dist/rules.md').catch(() => '')
 if (!rulesFile) {
   fail('rules', 'dist/rules.md is missing — child seeds have nothing to defer to')
 } else {
-  for (let i = 1; i <= 8; i += 1) {
+  // The range comes from the vendored parent list, not a constant here: a rule added
+  // upstream is vendored by `npm run rules`, and the guard then requires it in the
+  // artifact without anyone remembering to bump a number. Ids are stable, so a gap
+  // is a finding even when the count still matches.
+  const upstreamRules = await readText('upstream/rules.md').catch(() => '')
+  const highest = Math.max(
+    0,
+    ...[...upstreamRules.matchAll(/^- RULES-(\d+):/gm)].map((match) => Number(match[1])),
+  )
+  if (!highest) fail('rules', 'upstream/rules.md declares no rule ids')
+  for (let i = 1; i <= highest; i += 1) {
     const id = `RULES-${String(i).padStart(2, '0')}`
     if (!rulesFile.includes(`${id}:`)) fail('rules', `dist/rules.md does not define ${id}`)
   }

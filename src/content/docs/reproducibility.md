@@ -2,7 +2,7 @@
 title: Reproducibility
 description: Why the critic is deterministic for a seed, and what the freshness gate refuses.
 order: 2
-updated: 2026-11-19
+updated: 2026-11-21
 tags: reproducible, seed, freshness
 seeds: maintainer
 ---
@@ -25,8 +25,9 @@ The build closes that gap in two places:
 - `scripts/chart-data.mjs` runs the model and writes `src/data/charts.json`.
 - `scripts/freshness.mjs` refuses a build whose charts page does not state its snapshot.
 
-The summary carries a `snapshot` and a `seed`; the charts page prints both; the freshness gate
-checks they agree. A cached page that looks current is the exact defect this gate exists for.
+The summary carries a `snapshot` and a `seed`, and the charts page prints both. The freshness
+gate refuses a charts page that cannot state the snapshot it was generated from: a cached page
+that looks current is the exact defect this gate exists for.
 
 ## The two ports
 
@@ -45,8 +46,9 @@ the lab-side instrument that made the proxy and the magic measurable before this
 ```sh
 npm run charts     # model → src/data/charts.json
 npm run universes  # model → src/universes/critic.ts
-npm run build      # both, then the guard chain
+npm run build      # both, then the gate chain
 ```
 
-The guard refuses placeholders, leaked paths, a base-path mismatch, a route without a shell, a
-page that never reached the bundle, and a charts page that cannot state its snapshot.
+The gates are catalogued in [Run the critic](/guides/run). In CI two of them run before the model
+is touched — `npm run rotation -- gate`, then `npm run rules` — so a cycle that
+cannot claim its rotation, or is reading a stale rule list, never regenerates the summary.

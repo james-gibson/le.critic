@@ -24,15 +24,21 @@ prose in `src/content/` explains it.
 
 ```sh
 npm ci
-npm run build    # model → summary + universe, tsc, vite, shells, guards
-npm run check    # tsc --noEmit
-npm run guard    # the publish guard alone
-npm run smoke    # render every route
+npm run rotation -- gate   # gap, open cycle, rung: may this cycle publish?
+npm run rules              # catch-up check on the vendored rules; writes nothing
+npm run build              # model → summary + universe, tsc, vite, shells, guards
+npm run check              # tsc --noEmit
+npm run guard              # the publish guard alone
+npm run smoke              # render every route
 ```
 
 ## Rules that are easy to break
 
 - The summary and the universe are generated; editing `dist/` changes nothing.
+- `upstream/rotations.jsonl` is append-only; never edit or renumber a line. `verify` allocates the
+  id, and `abandon` closes an unclosed cycle with a reason.
+- CI runs `rotation -- gate`, then `rules -- --check`, then `build`. A failure in either
+  pre-build gate means nothing was regenerated or published.
 - Navigation, section indexes, table of contents, prev/next and counts are derived from the content
   tree. There is no nav array.
 - The isotope id is content-addressed: if `features/*.feature` changes, the page must be updated.
