@@ -22,6 +22,14 @@ an FM carrier separates a signal from static. The model synthesizes a **mixed st
 classes — `valid`, `jitter`, `spoofed`, `replayed` — and a demodulator classifies each event from
 observables alone, never reading the ground truth.
 
+**Declared scope.** The background is stationary, and the observables are phase, tri-state, cost
+and identity. The model makes no claim about reply **latency**, and no claim about a defence whose
+noise floor moves with traffic. Measured properties of a live surface — a timing oracle, a floor
+raised by legitimate load — are evidence *about* such a surface, not inputs to this model, and a
+result that depends on either is outside the verdict table. See
+[le.critic#1](https://github.com/james-gibson/le.critic/issues/1) and
+[local-time#248](https://github.com/james-gibson/local-time/issues/248).
+
 The anchor is `42 + 0i`; cadence is `τ/16` (16 ticks per rotation). A valid chain advances phase
 by the cadence every tick; jitter deviates from it; a spoofed or replayed event does not derive.
 Drift is imaginary distance from the anchor, and a rung is a maximum distance (0, 60, 100, 140,

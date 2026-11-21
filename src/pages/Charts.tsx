@@ -286,6 +286,12 @@ export function Charts() {
         <p className="mt-1 text-sm text-muted">
           Eight outcomes, each a spectrum: violation (broke), drift (at risk), pass (held).
         </p>
+        <p className="mt-2 text-sm text-muted">
+          <strong className="text-body">Declared scope.</strong> The model's background is
+          stationary and its observables are phase, tri-state, cost and identity. It makes no claim
+          about reply <em>latency</em>, and no claim about a defence whose noise floor moves with
+          traffic. A result that depends on either is outside this table.
+        </p>
         <div className="mt-4"><VerdictTable /></div>
       </div>
 
