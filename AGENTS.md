@@ -37,7 +37,7 @@ npm run smoke              # render every route
 - The summary and the universe are generated; editing `dist/` changes nothing.
 - `upstream/rotations.jsonl` is append-only; never edit or renumber a line. `verify` allocates the
   id, and `abandon` closes an unclosed cycle with a reason.
-- CI runs `rotation -- gate`, then `rules -- --check`, then `build`. A failure in either
+- CI runs `rotation -- gate`, then `rules`, then `build`. A failure in either
   pre-build gate means nothing was regenerated or published.
 - Navigation, section indexes, table of contents, prev/next and counts are derived from the content
   tree. There is no nav array.
