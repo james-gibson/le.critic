@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "source": "~/.local/share/opencode/opencode.db",
+  "sessions": 225,
+  "first_touches": 5279,
+  "discovered": 2032,
+  "discovered_share": 0.385,
+  "parameter": 1038,
+  "parameter_share": 0.197,
+  "research": 994,
+  "research_share": 0.188,
+  "search_tokens_parameter": 242973,
+  "search_tokens_research": 261249,
+  "follow_on_atom": {
+    "edit": 482,
+    "read": 310,
+    "write": 246
+  },
+  "similarity": {
+    "similar_title_pairs": 53,
+    "similar_input_jaccard": 0.0473,
+    "random_input_jaccard": 0.0019,
+    "lift": 24.9
+  },
+  "method": {
+    "discovery": "an earlier search in the same session surfaced the path before its first touch",
+    "parameter": "the discovered path is later edited or written in that session",
+    "research": "the discovered path is only read",
+    "similarity": "title word Jaccard >= 0.34 versus the rest, over 4,000 random session pairs",
+    "tokens": "search output chars / 4, each search credited once"
+  }
+}

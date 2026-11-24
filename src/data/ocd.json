@@ -1,0 +1,286 @@
+{
+  "snapshot": "2026-11-24",
+  "sourceHash": "sha256:84be852e2a0d0efa",
+  "window": {
+    "from": "2026-10-08",
+    "to": "2026-11-24"
+  },
+  "sessions": 240,
+  "toolCalls": 47243,
+  "backtracks": {
+    "total": 1247,
+    "byKind": {
+      "retry": 481,
+      "revision": 697,
+      "revert": 21,
+      "verify-repair": 48
+    },
+    "narrated": 0.575,
+    "sessions": 169,
+    "atoms": [
+      {
+        "atom": "create-file",
+        "rate": 14.65,
+        "backtracks": 371,
+        "calls": 2532,
+        "pricing": "state-bleed-detection"
+      },
+      {
+        "atom": "edit-file",
+        "rate": 6.97,
+        "backtracks": 506,
+        "calls": 7258,
+        "pricing": "state-bleed-detection"
+      },
+      {
+        "atom": "call-mcp-tool",
+        "rate": 6.26,
+        "backtracks": 196,
+        "calls": 3133,
+        "pricing": "harness-blindness"
+      },
+      {
+        "atom": "query-database",
+        "rate": 2.96,
+        "backtracks": 6,
+        "calls": 203,
+        "pricing": "secret-flow-violation"
+      },
+      {
+        "atom": "run-verify",
+        "rate": 2.01,
+        "backtracks": 55,
+        "calls": 2740,
+        "pricing": "declared-behavior-compliance"
+      },
+      {
+        "atom": "run-command",
+        "rate": 1.71,
+        "backtracks": 32,
+        "calls": 1876,
+        "pricing": "harness-blindness"
+      },
+      {
+        "atom": "manage-env",
+        "rate": 0.89,
+        "backtracks": 9,
+        "calls": 1014,
+        "pricing": "harness-blindness"
+      },
+      {
+        "atom": "build-artifact",
+        "rate": 0.76,
+        "backtracks": 8,
+        "calls": 1049,
+        "pricing": "constant-output-detection"
+      }
+    ]
+  },
+  "causes": [
+    {
+      "cause": "isolated",
+      "label": "wrong in isolation",
+      "events": 156,
+      "share": 0.12510024057738572
+    },
+    {
+      "cause": "interface",
+      "label": "wrong interface — the call was not the shape the system offers",
+      "events": 138,
+      "share": 0.11066559743384122
+    },
+    {
+      "cause": "base-damage",
+      "label": "base damage — a later change broke an earlier unit",
+      "events": 132,
+      "share": 0.10585404971932638
+    },
+    {
+      "cause": "syntax",
+      "label": "syntax / escaping",
+      "events": 109,
+      "share": 0.08740978348035285
+    },
+    {
+      "cause": "precision",
+      "label": "precision — the edit landed one character out",
+      "events": 63,
+      "share": 0.05052125100240577
+    },
+    {
+      "cause": "environment",
+      "label": "environment",
+      "events": 40,
+      "share": 0.03207698476343224
+    },
+    {
+      "cause": "assumption",
+      "label": "wrong assumption — the world was not as expected",
+      "events": 35,
+      "share": 0.028067361668003207
+    },
+    {
+      "cause": "compile",
+      "label": "compile / type — the unit did not build",
+      "events": 22,
+      "share": 0.01764234161988773
+    },
+    {
+      "cause": "verification",
+      "label": "verification — the test was wrong, not the work",
+      "events": 12,
+      "share": 0.009623095429029671
+    }
+  ],
+  "baseDamage": {
+    "events": 132,
+    "share": 0.106,
+    "repeatedShare": 0.349,
+    "crossTarget": 0.039,
+    "restructure": 0.051
+  },
+  "inputs": {
+    "touches": 5279,
+    "discovered": 2032,
+    "parameter": 1038,
+    "research": 994,
+    "classes": [
+      {
+        "name": "named",
+        "touches": 274,
+        "share": 0.052,
+        "fail": 0.0073
+      },
+      {
+        "name": "search",
+        "touches": 1958,
+        "share": 0.371,
+        "fail": 0.0107
+      },
+      {
+        "name": "tool",
+        "touches": 473,
+        "share": 0.09,
+        "fail": 0.0127
+      },
+      {
+        "name": "infer",
+        "touches": 2576,
+        "share": 0.488,
+        "fail": 0.0097
+      }
+    ],
+    "lift": 24.9
+  },
+  "overlap": {
+    "timeOnly": [
+      {
+        "factor": 1,
+        "collisions": 2
+      },
+      {
+        "factor": 2,
+        "collisions": 4
+      },
+      {
+        "factor": 4,
+        "collisions": 7
+      },
+      {
+        "factor": 8,
+        "collisions": 8
+      },
+      {
+        "factor": 16,
+        "collisions": 10
+      }
+    ],
+    "coStart": {
+      "exact_path_pairs": 20,
+      "exact_paths_involved": 17,
+      "basename_pairs": 169,
+      "sessions_involved": 67,
+      "share_of_sessions": 0.479
+    },
+    "sharedPairs": {
+      "pairs": 428,
+      "sampled": 40,
+      "sampled_collisions": 97,
+      "sampled_sessions": 36,
+      "sampled_events": 401,
+      "collisions_per_event": 0.242,
+      "collisions_per_pair": 2.42
+    },
+    "deps": {
+      "episodes": 12,
+      "events": 24,
+      "collisions": 132,
+      "collisionsPerEvent": 5.5
+    }
+  },
+  "locks": {
+    "manifest": {
+      "pairs": 10,
+      "ident": 0
+    },
+    "lock": {
+      "pairs": 43,
+      "ident": 0.86
+    },
+    "repeatShare": 0.479
+  },
+  "worktrees": {
+    "present": 65,
+    "dead": 10,
+    "classes": {
+      "dead": 10,
+      "active": 58,
+      "idle": 3,
+      "dirty": 4
+    },
+    "sizeGb": 1.25,
+    "tracked": 17399,
+    "docsTokens": 329020,
+    "visitor": {
+      "sessions": 43,
+      "tokensRead": 898444,
+      "sessionTokens": 29618553,
+      "cost": 23.72
+    }
+  },
+  "prior": {
+    "classes": [
+      {
+        "name": "named",
+        "touches": 274,
+        "share": 0.052,
+        "fail": 0.0073
+      },
+      {
+        "name": "search",
+        "touches": 1958,
+        "share": 0.371,
+        "fail": 0.0107
+      },
+      {
+        "name": "tool",
+        "touches": 473,
+        "share": 0.09,
+        "fail": 0.0127
+      },
+      {
+        "name": "infer",
+        "touches": 2576,
+        "share": 0.488,
+        "fail": 0.0097
+      }
+    ],
+    "synapse": {
+      "sessions": 121,
+      "sessionShare": 0.504,
+      "structureShare": 0.036,
+      "firstShare": 0.243,
+      "searchWith": 23.7
+    }
+  }
+}

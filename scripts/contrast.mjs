@@ -290,9 +290,14 @@ for (const file of walk('dist')) {
   const marks = []
   const texts = []
   const lines = []
+  // Marks are compared inside their own <svg>. Two elements in different svg
+  // elements are never adjacent on screen, and their user coordinates are not a
+  // shared space — comparing across them invents contact between charts.
+  const perSvg = []
   for (const svg of page.matchAll(/<svg\b[\s\S]*?<\/svg>/g)) {
     if (!/fill="currentColor"|stroke="currentColor"/.test(svg[0])) continue
     const seen = readSvg(page, svg[0], svg.index)
+    perSvg.push(seen)
     marks.push(...seen.marks)
     texts.push(...seen.texts)
     lines.push(...seen.lines)
@@ -316,35 +321,39 @@ for (const file of walk('dist')) {
     }
   }
 
-  // Two marks that touch have to be told apart.
-  for (let i = 0; i < marks.length; i += 1) {
-    const a = marks[i]
-    if (!a.box || decorative(a.token)) continue
-    for (let j = i + 1; j < marks.length; j += 1) {
-      const b = marks[j]
-      if (!b.box || decorative(b.token) || a.token === b.token) continue
-      if (!touches(a.box, b.box)) continue
-      const ratio = contrast(hexOf(a.token), hexOf(b.token))
-      if (ratio < 3) {
-        fail(`${rel}: ${a.token} touches ${b.token} in <${a.name}> at ${ratio.toFixed(2)}:1, below 3:1`)
+  // Two marks that touch have to be told apart — within one drawing.
+  for (const seen of perSvg) {
+    const own = seen.marks
+    for (let i = 0; i < own.length; i += 1) {
+      const a = own[i]
+      if (!a.box || decorative(a.token)) continue
+      for (let j = i + 1; j < own.length; j += 1) {
+        const b = own[j]
+        if (!b.box || decorative(b.token) || a.token === b.token) continue
+        if (!touches(a.box, b.box)) continue
+        const ratio = contrast(hexOf(a.token), hexOf(b.token))
+        if (ratio < 3) {
+          fail(`${rel}: ${a.token} touches ${b.token} in <${a.name}> at ${ratio.toFixed(2)}:1, below 3:1`)
+        }
       }
     }
   }
 
-  // A label on top of a mark has to read against it.
-  for (const text of texts) {
+  // A label on top of a mark has to read against it — in the same drawing.
+  const labelPairs = perSvg.flatMap((seen) =>
+    seen.texts.flatMap((text) => seen.marks.map((mark) => ({ text, mark }))),
+  )
+  for (const { text, mark } of labelPairs) {
     if (decorative(text.token) || !text.anchor || !Number.isFinite(text.anchor.x)) continue
-    for (const mark of marks) {
-      if (!mark.box || decorative(mark.token)) continue
-      const { x, y } = text.anchor
-      const inside = x >= mark.box.x0 && x <= mark.box.x1 && y >= mark.box.y0 && y <= mark.box.y1
-      if (!inside) continue
-      const ratio = contrast(hexOf(text.token), hexOf(mark.token))
-      if (ratio < 4.5) {
-        fail(
-          `${rel}: ${text.token} anchored inside a ${mark.token} ${mark.name} is ${ratio.toFixed(2)}:1, below 4.5`,
-        )
-      }
+    if (!mark.box || decorative(mark.token)) continue
+    const { x, y } = text.anchor
+    const inside = x >= mark.box.x0 && x <= mark.box.x1 && y >= mark.box.y0 && y <= mark.box.y1
+    if (!inside) continue
+    const ratio = contrast(hexOf(text.token), hexOf(mark.token))
+    if (ratio < 4.5) {
+      fail(
+        `${rel}: ${text.token} anchored inside a ${mark.token} ${mark.name} is ${ratio.toFixed(2)}:1, below 4.5`,
+      )
     }
   }
 

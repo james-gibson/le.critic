@@ -20,20 +20,30 @@ Four questions, answered as things a build can check rather than as prose:
   allocated only when the line lands, and a gate that refuses a gap, an unclosed cycle, or a rung
   of `DEGRADED` — with `npm run rules` refusing a rule list the seed has outgrown.
 
+## The measured corpus
+
+`/corpus` reads the other way round: not a model run but measurements of a real session store —
+rework by atom, where inputs came from, what collides, what leftovers cost. The snapshot is frozen
+under `data/ocd/` with a SHA-256 per file; `scripts/ocd-data.mjs` refuses a file that does not match
+its manifest and writes `src/data/ocd.json`, and the freshness gate refuses a corpus page that
+cannot state its snapshot.
+
 ## Build
 
 ```sh
 npm ci
 npm run rotation -- gate   # gap, open cycle, rung: may this cycle publish?
 npm run rules              # catch-up check on the vendored rules; writes nothing
-npm run build              # model → summary + universe, tsc, vite, shells, gates
+npm run build              # model → summary + universe + corpus, tsc, vite, shells, gates
+npm run corpus             # regenerate src/data/ocd.json from data/ocd/
 npm run check              # tsc --noEmit
 npm run guard              # the publish guard alone
 npm run smoke              # render every route
 ```
 
-No data to import, no service to start: the model is the data. The build fails closed: a leaked
-path, a credential-shaped string, a source map, a dead internal link, a snapshot the charts page
-cannot state, or a rotation record that disagrees with the ledger stops the artifact before it is
+No service to start: the critic's data is the model, and the corpus is a frozen snapshot with a
+receipt. The build fails closed: a leaked path, a credential-shaped string, a source map, a dead
+internal link, a snapshot the charts or corpus page cannot state, a vendored file that disagrees
+with its hash, or a rotation record that disagrees with the ledger stops the artifact before it is
 published. [Run the critic](https://james-gibson.github.io/le.critic/guides/run) names every gate
 and the failure it prevents.

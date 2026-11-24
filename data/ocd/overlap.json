@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "warning": "Counterfactual. Real events, co-start placement, synthetic dependency episodes. No merge was run and no repository was touched.",
+  "mutating_events": 877,
+  "sessions": 140,
+  "co_start_all": {
+    "exact_path_pairs": 20,
+    "exact_paths_involved": 17,
+    "basename_pairs": 169,
+    "sessions_involved": 67,
+    "share_of_sessions": 0.479
+  },
+  "time_only": [
+    {
+      "factor": 1,
+      "stride_min": 14.4,
+      "collisions": 2
+    },
+    {
+      "factor": 2,
+      "stride_min": 7.2,
+      "collisions": 4
+    },
+    {
+      "factor": 4,
+      "stride_min": 3.6,
+      "collisions": 7
+    },
+    {
+      "factor": 8,
+      "stride_min": 1.8,
+      "collisions": 8
+    },
+    {
+      "factor": 16,
+      "stride_min": 0.9,
+      "collisions": 10
+    }
+  ],
+  "shared_target_pairs": {
+    "pairs": 428,
+    "sampled": 40,
+    "sampled_collisions": 97,
+    "sampled_sessions": 36,
+    "sampled_events": 401,
+    "collisions_per_event": 0.242,
+    "collisions_per_pair": 2.42
+  },
+  "deps": {
+    "episodes": 12,
+    "events": 24,
+    "events_per_episode": 2,
+    "root": "/Users/dev/projects/kb/scripts",
+    "dep_vs_dep_collisions": 132,
+    "dep_sessions_involved": 12,
+    "collisions_per_event": 5.5,
+    "mined_medians": {
+      "median": 2,
+      "p90": 3,
+      "max": 5
+    },
+    "mined_source_medians": {
+      "median": 0,
+      "p90": 1,
+      "max": 2
+    }
+  },
+  "shape": {
+    "dep_commit_role_share": {
+      "manifest": 0.335,
+      "lock": 0.434,
+      "source": 0.087,
+      "test": 0.032,
+      "docs": 0.041,
+      "config": 0.059,
+      "other": 0.013
+    },
+    "dep_vs_random_dozen": {
+      "mean": 0.105,
+      "min": 0.048,
+      "max": 0.131
+    },
+    "dep_vs_single_event": {
+      "mean": 0.085
+    },
+    "dep_vs_dep_dozen": {
+      "mean": 0.963,
+      "min": 0.718
+    }
+  },
+  "method": {
+    "co_start": "sessions keep session-relative time and start together",
+    "collision": "same key, different session, overlapping interval",
+    "shared_target_pairs": "pairs of sessions that touch the same basename",
+    "dep_episode": "manifest + lock + source at the mined median, test only if history says so",
+    "shape": "role shares + kind shares, cosine"
+  }
+}

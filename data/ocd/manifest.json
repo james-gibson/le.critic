@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "captured_at": "2026-11-24",
+  "source": "skillz/docs/ocd (qdrant: not needed; the corpus is files)",
+  "files": {
+    "backtracks.json": {
+      "sha256": "1abbc6b5348e352b5e0c8b878f0b03acf78ead085a1cf99508ff9953bfffa907",
+      "bytes": 5243
+    },
+    "causes.json": {
+      "sha256": "ec53de8b5527c754037581c70bb3ace1c8f7a45baf5dab971c9f27ea51e2e118",
+      "bytes": 7913
+    },
+    "inputs.json": {
+      "sha256": "5e39a1524cca1e5b2c57e81a7251251b8591ba6804321c91ed56437b6a1380df",
+      "bytes": 971
+    },
+    "locks.json": {
+      "sha256": "50e78cf986e05ed790e052c5e639214109129dbe5f7988f84c5e044b7925ec61",
+      "bytes": 54439
+    },
+    "overlap.json": {
+      "sha256": "78977b671ab03f1089e07e08ef63f42547ce55365647fdd89798fdd3311f8363",
+      "bytes": 2236
+    },
+    "prior.json": {
+      "sha256": "0e7d0f096612398529007ad8e365c2653f3b7aa969c2b0fdd8533c1d4ee117be",
+      "bytes": 2502
+    },
+    "worktrees.json": {
+      "sha256": "09b9969851629c8b41c9e65afa9b17cb24cb3cca7af79bb8f0e7fc7ac7658b3e",
+      "bytes": 37640
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { Layout } from './components/Layout'
 import { SECTIONS, getPage, type SectionId } from './lib/content'
 import { Charts } from './pages/Charts'
 import { Colour } from './pages/Colour'
+import { Corpus } from './pages/Corpus'
 import { Design } from './pages/Design'
 import { DocPage } from './pages/DocPage'
 import { Home } from './pages/Home'
@@ -33,6 +34,7 @@ export function App() {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="charts" element={<Charts />} />
+        <Route path="corpus" element={<Corpus />} />
         <Route path="universes" element={<Universes />} />
         <Route path="design" element={<Design />} />
         <Route path="palette" element={<Colour />} />

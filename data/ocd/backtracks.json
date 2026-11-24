@@ -1,0 +1,215 @@
+{
+  "schema": 1,
+  "source": "~/.local/share/opencode/opencode.db",
+  "window": {
+    "from": "2026-10-08",
+    "to": "2026-11-24"
+  },
+  "sessions": 240,
+  "runs": 1893,
+  "tool_calls": 47243,
+  "failed_calls": 1579,
+  "backtracks": 1247,
+  "sessions_with_backtrack": 169,
+  "by_kind": {
+    "retry": 481,
+    "revision": 697,
+    "revert": 21,
+    "verify-repair": 48
+  },
+  "by_error_class": {
+    "none": 718,
+    "other": 247,
+    "silent": 163,
+    "parse": 69,
+    "missing": 33,
+    "network": 8,
+    "conflict": 5,
+    "typecheck": 3,
+    "permission": 1
+  },
+  "narrated_share": 0.575,
+  "repair_ok": 1179,
+  "calls_between": {
+    "0": 487,
+    "1": 326,
+    "2": 169,
+    "3": 111,
+    "4": 66,
+    "5": 57,
+    "6": 9,
+    "7": 4,
+    "8": 2,
+    "10": 2,
+    "11": 1,
+    "13": 1,
+    "14": 1,
+    "17": 1,
+    "19": 1,
+    "20": 1,
+    "22": 1,
+    "24": 1,
+    "32": 1,
+    "36": 1,
+    "39": 1,
+    "72": 1,
+    "77": 1,
+    "92": 1
+  },
+  "by_atom": {
+    "edit-file": {
+      "backtracks": 506,
+      "calls": 7258,
+      "per_100_calls": 6.97,
+      "narrated": 258,
+      "pricing": "state-bleed-detection",
+      "weight": 28,
+      "distance_per_100_calls": 195.2
+    },
+    "create-file": {
+      "backtracks": 371,
+      "calls": 2532,
+      "per_100_calls": 14.65,
+      "narrated": 264,
+      "pricing": "state-bleed-detection",
+      "weight": 28,
+      "distance_per_100_calls": 410.3
+    },
+    "call-mcp-tool": {
+      "backtracks": 196,
+      "calls": 3133,
+      "per_100_calls": 6.26,
+      "narrated": 102,
+      "pricing": "harness-blindness",
+      "weight": 16,
+      "distance_per_100_calls": 100.1
+    },
+    "run-verify": {
+      "backtracks": 55,
+      "calls": 2740,
+      "per_100_calls": 2.01,
+      "narrated": 48,
+      "pricing": "declared-behavior-compliance",
+      "weight": 12,
+      "distance_per_100_calls": 24.1
+    },
+    "run-command": {
+      "backtracks": 32,
+      "calls": 1876,
+      "per_100_calls": 1.71,
+      "narrated": 13,
+      "pricing": "harness-blindness",
+      "weight": 16,
+      "distance_per_100_calls": 27.3
+    },
+    "inspect-file": {
+      "backtracks": 27,
+      "calls": 15350,
+      "per_100_calls": 0.18,
+      "narrated": 10,
+      "pricing": "scope-compliance",
+      "weight": 20,
+      "distance_per_100_calls": 3.5
+    },
+    "read-git-state": {
+      "backtracks": 18,
+      "calls": 4129,
+      "per_100_calls": 0.44,
+      "narrated": 8,
+      "pricing": "harness-blindness",
+      "weight": 16,
+      "distance_per_100_calls": 7.0
+    },
+    "manage-env": {
+      "backtracks": 9,
+      "calls": 1014,
+      "per_100_calls": 0.89,
+      "narrated": 3,
+      "pricing": "harness-blindness",
+      "weight": 16,
+      "distance_per_100_calls": 14.2
+    },
+    "build-artifact": {
+      "backtracks": 8,
+      "calls": 1049,
+      "per_100_calls": 0.76,
+      "narrated": 3,
+      "pricing": "constant-output-detection",
+      "weight": 20,
+      "distance_per_100_calls": 15.3
+    },
+    "fetch-url": {
+      "backtracks": 6,
+      "calls": 951,
+      "per_100_calls": 0.63,
+      "narrated": 4,
+      "pricing": "secret-flow-violation",
+      "weight": 24,
+      "distance_per_100_calls": 15.1
+    },
+    "query-database": {
+      "backtracks": 6,
+      "calls": 203,
+      "per_100_calls": 2.96,
+      "narrated": 2,
+      "pricing": "secret-flow-violation",
+      "weight": 24,
+      "distance_per_100_calls": 70.9
+    },
+    "open-ticket": {
+      "backtracks": 5,
+      "calls": 2917,
+      "per_100_calls": 0.17,
+      "narrated": 0,
+      "pricing": "declared-behavior-compliance",
+      "weight": 12,
+      "distance_per_100_calls": 2.1
+    },
+    "move-file": {
+      "backtracks": 4,
+      "calls": 597,
+      "per_100_calls": 0.67,
+      "narrated": 1,
+      "pricing": "state-bleed-detection",
+      "weight": 28,
+      "distance_per_100_calls": 18.8
+    },
+    "search-tree": {
+      "backtracks": 2,
+      "calls": 1925,
+      "per_100_calls": 0.1,
+      "narrated": 1,
+      "pricing": "scope-compliance",
+      "weight": 20,
+      "distance_per_100_calls": 2.1
+    },
+    "commit-tree": {
+      "backtracks": 1,
+      "calls": 400,
+      "per_100_calls": 0.25,
+      "narrated": 0,
+      "pricing": "state-bleed-detection",
+      "weight": 28,
+      "distance_per_100_calls": 7.0
+    },
+    "manage-daemon": {
+      "backtracks": 1,
+      "calls": 151,
+      "per_100_calls": 0.66,
+      "narrated": 0,
+      "pricing": "state-bleed-detection",
+      "weight": 28,
+      "distance_per_100_calls": 18.5
+    }
+  },
+  "method": {
+    "run": "one user turn: the narration the agent wrote and the calls it made next",
+    "description": "quoted from the narration as written, never summarised afterwards",
+    "retry": "a failed call and a later call in the same run on the same target (<= 8 calls)",
+    "revision": "a second mutating call whose old text is the first call's new text",
+    "verify-repair": "a failed verification, a change, then a passing verification",
+    "revert": "git checkout/restore/reset naming a path changed in the same run",
+    "narrated": "the agent says a correction happened between the attempt and the repair",
+    "target": "file path; git/npm subcommand; python -m module; MCP tool; URL; skill id"
+  }
+}

@@ -42,6 +42,12 @@ export function SiteHeader() {
             Charts
           </NavLink>
           <NavLink
+            to="/corpus"
+            className={({ isActive }) => `${linkBase} shrink-0 ${isActive ? linkActive : ''}`}
+          >
+            Corpus
+          </NavLink>
+          <NavLink
             to="/universes"
             className={({ isActive }) => `${linkBase} shrink-0 ${isActive ? linkActive : ''}`}
           >

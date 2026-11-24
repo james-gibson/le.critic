@@ -39,6 +39,23 @@ if (!snapshot) {
 }
 console.log(`freshness: snapshot ${snapshot}, seed ${charts.seed}`)
 
+// --- 1b. the corpus summary carries its own snapshot and source hash --------
+const corpusPath = join('src', 'data', 'ocd.json')
+let corpusSnapshot = null
+if (existsSync(corpusPath)) {
+  const corpus = JSON.parse(readFileSync(corpusPath, 'utf8'))
+  corpusSnapshot = corpus.snapshot
+  if (!corpusSnapshot || !corpus.sourceHash) {
+    console.error('freshness: ocd.json has no snapshot or source hash — the corpus is unattributable')
+    failures += 1
+  } else {
+    console.log(`freshness: corpus ${corpusSnapshot}, source ${corpus.sourceHash}`)
+  }
+} else {
+  console.error('freshness: src/data/ocd.json is missing — run `npm run corpus`')
+  failures += 1
+}
+
 // --- 2. the page says what snapshot it was built from ---------------------
 const dist = valueOf('--require-stamp')
 if (dist) {
@@ -52,6 +69,21 @@ if (dist) {
     if (!states) {
       console.error(
         'freshness: the charts page does not state its snapshot — a cached page that looks current is the defect this check exists for',
+      )
+      failures += 1
+    }
+  }
+
+  const corpusPage = join(dist, 'corpus', 'index.html')
+  if (!existsSync(corpusPage)) {
+    console.error(`freshness: ${corpusPage} is missing — build before checking the corpus stamp`)
+    failures += 1
+  } else {
+    const html = readFileSync(corpusPage, 'utf8')
+    const states = html.includes('Snapshot') && (!corpusSnapshot || html.includes(String(corpusSnapshot)))
+    if (!states) {
+      console.error(
+        'freshness: the corpus page does not state its snapshot — a measurement without its date is a claim',
       )
       failures += 1
     }

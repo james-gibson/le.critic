@@ -1,0 +1,252 @@
+{
+  "schema": 1,
+  "source": "events.jsonl",
+  "total": 1247,
+  "caveat": "cause is read from the correction's own words; 540 events are too terse. The share of base damage is a lower bound, not an estimate.",
+  "by_cause": {
+    "unclassified": 540,
+    "isolated": 156,
+    "interface": 138,
+    "base-damage": 132,
+    "syntax": 109,
+    "precision": 63,
+    "environment": 40,
+    "assumption": 35,
+    "compile": 22,
+    "verification": 12
+  },
+  "labels": {
+    "base-damage": "base damage \u2014 a later change broke an earlier unit",
+    "interface": "wrong interface \u2014 the call was not the shape the system offers",
+    "syntax": "syntax / escaping",
+    "compile": "compile / type \u2014 the unit did not build",
+    "assumption": "wrong assumption \u2014 the world was not as expected",
+    "precision": "precision \u2014 the edit landed one character out",
+    "verification": "verification \u2014 the test was wrong, not the work",
+    "environment": "environment",
+    "isolated": "wrong in isolation",
+    "unclassified": "unclassified \u2014 too terse to read"
+  },
+  "per_atom": {
+    "manage-env": {
+      "unclassified": 4,
+      "isolated": 1,
+      "base-damage": 4
+    },
+    "create-file": {
+      "unclassified": 154,
+      "isolated": 66,
+      "interface": 31,
+      "compile": 12,
+      "syntax": 38,
+      "precision": 12,
+      "environment": 13,
+      "base-damage": 32,
+      "verification": 6,
+      "assumption": 7
+    },
+    "call-mcp-tool": {
+      "isolated": 11,
+      "unclassified": 86,
+      "environment": 7,
+      "interface": 40,
+      "assumption": 15,
+      "base-damage": 7,
+      "syntax": 22,
+      "precision": 5,
+      "verification": 1,
+      "compile": 2
+    },
+    "edit-file": {
+      "unclassified": 206,
+      "interface": 50,
+      "base-damage": 82,
+      "precision": 40,
+      "environment": 13,
+      "syntax": 34,
+      "isolated": 63,
+      "verification": 4,
+      "assumption": 10,
+      "compile": 4
+    },
+    "fetch-url": {
+      "syntax": 1,
+      "unclassified": 4,
+      "precision": 1
+    },
+    "read-git-state": {
+      "unclassified": 12,
+      "precision": 2,
+      "assumption": 1,
+      "isolated": 1,
+      "syntax": 1,
+      "interface": 1
+    },
+    "inspect-file": {
+      "unclassified": 18,
+      "assumption": 1,
+      "compile": 2,
+      "precision": 1,
+      "environment": 2,
+      "isolated": 1,
+      "syntax": 1,
+      "interface": 1
+    },
+    "move-file": {
+      "unclassified": 4
+    },
+    "run-verify": {
+      "verification": 1,
+      "unclassified": 22,
+      "compile": 2,
+      "syntax": 4,
+      "environment": 4,
+      "interface": 12,
+      "base-damage": 1,
+      "isolated": 6,
+      "precision": 2,
+      "assumption": 1
+    },
+    "run-command": {
+      "unclassified": 16,
+      "syntax": 6,
+      "isolated": 7,
+      "interface": 1,
+      "base-damage": 2
+    },
+    "query-database": {
+      "unclassified": 4,
+      "syntax": 1,
+      "interface": 1
+    },
+    "open-ticket": {
+      "base-damage": 1,
+      "syntax": 1,
+      "unclassified": 3
+    },
+    "build-artifact": {
+      "base-damage": 3,
+      "unclassified": 4,
+      "interface": 1
+    },
+    "commit-tree": {
+      "unclassified": 1
+    },
+    "search-tree": {
+      "unclassified": 1,
+      "environment": 1
+    },
+    "manage-daemon": {
+      "unclassified": 1
+    }
+  },
+  "structural": {
+    "repeated_paths": 154,
+    "events_on_repeated_paths": 435,
+    "repeated_share": 0.349,
+    "worst": [
+      {
+        "session": "ses_eccd9e80dffeQz5EzeA9yznwfh",
+        "path": "/Users/dev/projects/kb/scripts/qdrant/index_kb.py",
+        "events": 11
+      },
+      {
+        "session": "ses_eb9b446e0ffeXfnvLuGGTYV8XV",
+        "path": "/Users/dev/projects/personal/adhd/internal/mcpserver/server.go",
+        "events": 10
+      },
+      {
+        "session": "ses_ebe58bcf8ffe80MQp8GVFuy6z2",
+        "path": "/Users/dev/projects/kb/scripts/lab/SPLASH.md",
+        "events": 9
+      },
+      {
+        "session": "ses_ed7e43fb9ffe40WCrd7R3MaXgs",
+        "path": "/Users/dev/projects/personal/local-time/src/config/universes/studios/studios.test.ts",
+        "events": 8
+      },
+      {
+        "session": "ses_eccd9e80dffeQz5EzeA9yznwfh",
+        "path": "/Users/dev/projects/personal/docs/scripts/lore-content.mjs",
+        "events": 8
+      }
+    ],
+    "cross_target": 49,
+    "cross_target_share": 0.039,
+    "cross_target_by_kind": {
+      "revert": 21,
+      "verify-repair": 28
+    },
+    "back_reference": 312,
+    "back_reference_share": 0.25,
+    "restructure": 64,
+    "restructure_share": 0.051
+  },
+  "base_damage": {
+    "events": 132,
+    "share": 0.106,
+    "by_atom": {
+      "manage-env": 4,
+      "create-file": 32,
+      "call-mcp-tool": 7,
+      "edit-file": 82,
+      "run-verify": 1,
+      "run-command": 2,
+      "open-ticket": 1,
+      "build-artifact": 3
+    }
+  },
+  "examples": {
+    "isolated": [
+      {
+        "atom": "call-mcp-tool",
+        "session": "ses_ee1edeebbffekvAFAql1grGrkk",
+        "text": "Timers are unavailable in the Code Mode runtime. I can't sleep inside execute. Let me instead sleep via a shell command, then call the adhd tools. Or just call the tools now \u2014 probably enough time has passed. Let me call"
+      },
+      {
+        "atom": "create-file",
+        "session": "ses_ee12951ffffe3lyQKwPR22HAq7",
+        "text": "I left placeholder REPL_STATE and a variable issue. Let me rewrite the script cleanly. Actually there's a bug: first sed replaces `/tmp/lezz-base/state-a` with REPL_STATE_A, but then I sed again. Also `REPL_STATE_A` line"
+      },
+      {
+        "atom": "create-file",
+        "session": "ses_ee12951ffffe3lyQKwPR22HAq7",
+        "text": "Wait, in the test I wrote `test.removes` but the field is `removed`. Let me fix that: `sink.removes` \u2192 `sink.removed`. Also `fakeIsotopeSink` has field `removed`. Let me fix the test. Also I should double check that `Eve"
+      }
+    ],
+    "interface": [
+      {
+        "atom": "call-mcp-tool",
+        "session": "ses_ee12951ffffe3lyQKwPR22HAq7",
+        "text": "The OK MCP server is bound to some project root, or requires a cwd inside an OK project. Let me find where the OK project is. The MCP server is running. Let me check the config tool without cwd. Actually the `config` too"
+      },
+      {
+        "atom": "edit-file",
+        "session": "ses_ee12951ffffe3lyQKwPR22HAq7",
+        "text": "Oops \u2014 I added a `notify` helper twice: once in the Upsert edit and once in the Remove/AgeOut edit. I need to remove the duplicate. Let me check: the first edit added notify after upsertLocked. The second edit added noti"
+      },
+      {
+        "atom": "create-file",
+        "session": "ses_ee12951ffffe3lyQKwPR22HAq7",
+        "text": "I made a mess in `syncHealthLoop` \u2014 I wrote a placeholder nonsense `if in := in; in != nil` and referenced `in` which isn't in scope (syncHealthLoop is a free function). Let me fix syncHealthLoop to take the engine and s"
+      }
+    ],
+    "base-damage": [
+      {
+        "atom": "edit-file",
+        "session": "ses_ee12951ffffe3lyQKwPR22HAq7",
+        "text": "Oops, my second edit's oldString was wrong \u2014 I accidentally included template content for the struct replacement. I intended to edit the struct field and add the helper. Let me do it properly. Let me add `ClusterID strin"
+      },
+      {
+        "atom": "edit-file",
+        "session": "ses_ee12951ffffe3lyQKwPR22HAq7",
+        "text": "I left a duplicate `var value any`? Let me read mcp.go around the decodeToolResult. The edit replaced the `var value any ...` block but perhaps there's still a leftover `var value any` line above. Let me read lines 225-2"
+      },
+      {
+        "atom": "call-mcp-tool",
+        "session": "ses_ee12951ffffe3lyQKwPR22HAq7",
+        "text": "The variable `tools` conflicts with the Code Mode `tools` global. Rename."
+      }
+    ]
+  }
+}
