@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "source": "~/.local/share/opencode/opencode.db",
+  "sessions": 240,
+  "first_touches": 5281,
+  "provenance": {
+    "named": {
+      "touches": 274,
+      "share": 0.052,
+      "failed": 2,
+      "fail_rate": 0.0073
+    },
+    "search": {
+      "touches": 1958,
+      "share": 0.371,
+      "failed": 21,
+      "fail_rate": 0.0107
+    },
+    "tool": {
+      "touches": 473,
+      "share": 0.09,
+      "failed": 6,
+      "fail_rate": 0.0127
+    },
+    "infer": {
+      "touches": 2576,
+      "share": 0.488,
+      "failed": 25,
+      "fail_rate": 0.0097
+    }
+  },
+  "fail_by_tool": {
+    "named": {
+      "read": {
+        "touches": 247,
+        "fail_rate": 0.004
+      },
+      "edit": {
+        "touches": 5,
+        "fail_rate": 0.2
+      },
+      "write": {
+        "touches": 22,
+        "fail_rate": 0.0
+      }
+    },
+    "search": {
+      "read": {
+        "touches": 1240,
+        "fail_rate": 0.0032
+      },
+      "edit": {
+        "touches": 477,
+        "fail_rate": 0.0335
+      },
+      "write": {
+        "touches": 241,
+        "fail_rate": 0.0041
+      }
+    },
+    "tool": {
+      "read": {
+        "touches": 272,
+        "fail_rate": 0.011
+      },
+      "edit": {
+        "touches": 77,
+        "fail_rate": 0.039
+      },
+      "write": {
+        "touches": 124,
+        "fail_rate": 0.0
+      }
+    },
+    "infer": {
+      "read": {
+        "touches": 589,
+        "fail_rate": 0.0272
+      },
+      "edit": {
+        "touches": 78,
+        "fail_rate": 0.0641
+      },
+      "write": {
+        "touches": 1909,
+        "fail_rate": 0.0021
+      }
+    }
+  },
+  "synapse": {
+    "calls": 2420,
+    "sessions": 121,
+    "session_share": 0.504,
+    "text_shaped_calls": 1017,
+    "structure_shaped_calls": 88,
+    "structure_share_of_synapse": 0.036,
+    "sessions_using_structure": 21,
+    "sessions_with_both_search_and_synapse": 115,
+    "synapse_first_share": 0.243,
+    "searches_per_100_calls_with": 23.7,
+    "searches_per_100_calls_without": 21.5,
+    "infer_fail_with": 0.0107,
+    "infer_fail_without": 0.0065
+  },
+  "method": {
+    "named": "the path or its basename appears in the prompt (system + user) before the touch",
+    "search": "an earlier search in the session surfaced it",
+    "tool": "an earlier non-search tool output surfaced it",
+    "infer": "none of the above",
+    "fail": "metadata.error, non-zero exit, error status, or an error-prefixed result",
+    "structure": "synapse_explore_graph or synapse_get_context in the call"
+  }
+}

@@ -18,6 +18,7 @@ import { PAGES } from '../src/lib/content'
 const routes = [
   '/',
   '/charts',
+  '/corpus',
   '/universes',
   '/design',
   '/palette',

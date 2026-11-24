@@ -20,6 +20,18 @@ prose in `src/content/` explains it.
 - The **freshness gate** (`scripts/freshness.mjs`) refuses a build whose charts page does not state
   its snapshot. Edit the model, then `npm run build` — do not edit the summary by hand.
 
+## The corpus is a receipt
+
+`/corpus` is not the model. It is a frozen snapshot of measurements taken elsewhere, vendored under
+`data/ocd/` with a SHA-256 per file in `data/ocd/manifest.json`.
+
+- `scripts/ocd-data.mjs` verifies every vendored file against the manifest before reading it, then
+  writes `src/data/ocd.json`. A hand-edited snapshot stops the build.
+- To refresh: regenerate the JSON with the tools that produced it (`ocd-rework`, `ocd-causes`,
+  `ocd-inputs`, `ocd-smush`, `ocd-locks`, `ocd-context`), copy it into `data/ocd/`, rewrite the
+  manifest, run `npm run build`. Never edit `src/data/ocd.json`.
+- The freshness gate checks the corpus stamp as well as the charts stamp.
+
 ## Commands
 
 ```sh
@@ -28,6 +40,7 @@ npm run rotation -- gate   # gap, open cycle, rung: may this cycle publish?
 npm run rules              # catch-up check on the vendored rules; writes nothing
 npm run build              # model → summary + universe, tsc, vite, shells, guards
 npm run check              # tsc --noEmit
+npm run corpus             # regenerate src/data/ocd.json from data/ocd/
 npm run guard              # the publish guard alone
 npm run smoke              # render every route
 ```
@@ -42,4 +55,6 @@ npm run smoke              # render every route
 - Navigation, section indexes, table of contents, prev/next and counts are derived from the content
   tree. There is no nav array.
 - The isotope id is content-addressed: if `features/*.feature` changes, the page must be updated.
+- Marks are compared **within one `<svg>`**. Different drawings do not share a coordinate space, so
+  never "fix" a contrast finding by moving a mark in another chart; fix the drawing it is in.
 - `dist/404.html` is a real page, not an SPA fallback: there is no router.

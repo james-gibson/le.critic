@@ -23,6 +23,7 @@ const OUT = 'dist/.prerender'
 const routes = [
   { file: 'home', path: '/' },
   { file: 'charts', path: '/charts' },
+  { file: 'corpus', path: '/corpus' },
   { file: 'universes', path: '/universes' },
   { file: 'design', path: '/design' },
   { file: 'palette', path: '/palette' },
