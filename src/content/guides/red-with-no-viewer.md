@@ -1,6 +1,6 @@
 ---
 title: A verdict is not a delivery
-description: Six days, a dead edge proxy, and 1,792 postures that read YELLOW with nothing failing — because the checks that would have caught it skipped instead of failing.
+description: Six days, a dead edge proxy, and 1,789 consecutive postures that read cve_safe — because a stopped proxy serves no HTTP/2, and the check that would have caught the outage was satisfied by it.
 order: 5
 updated: 2026-11-28
 tags: nginx, unattended-upgrades, delivery, hysteresis, incident
@@ -37,17 +37,27 @@ The contract was right. The response was right. Nothing was delivered.
 | 2026-11-25 17:43:55 | RED | `E1` becomes a FAIL, for a reason that is not nginx |
 | 2026-11-28 00:35:47 | RED | this run arrives |
 
-After the proxy died there are 1,792 postures. None of them names the proxy. The verdict that
-should have been red for six days was, for four of them, **YELLOW with an empty fail set** —
-which is not a nearly-fine, it is an admission that nothing was measured.
+After the proxy died there are 1,790 postures. **`cve_safe` is `true` in 1,789 of them.** None of
+them names the proxy. The verdict that should have been red for six days was, for four of them,
+**YELLOW with an empty fail set** — and an empty fail set is not a nearly-fine, it is a statement
+that nothing the contract defines as a failure happened.
+
+The only reds in the window are somebody else: one posture with `I1` (the jumpbox) at 22:48, then
+`E1` (the API) from 26 Nov. The proxy never appears.
 
 ## Three lessons
 
-**A skip is not a pass, and yellow is where a missing fact hides.** The cycle could not collect a
-view — the API it collects through was down — so the product checks that need the view were
-*skipped*, not failed. The aggregation rendered "unmeasured" as YELLOW. Yellow reads as *a bit
-off, probably theirs*; it does not read as *I cannot see*. A required check that could not run
-belongs in the fail set, not in a warn list, or the light is telling you about the weather.
+**A dead service is vacuously safe.** The product term is *affected build **and** HTTP/2 **and**
+the run state*. With the process gone, the HTTP/2 term is false, so the product is false, so
+`cve_safe` is true. The check was right about the product and blind to the outage: the proxy was
+secure because it was not serving. `cve_safe: true` is not evidence of a fix — it is evidence of
+this one thing, which a stopped process also satisfies. Any check whose "safe" answer can be
+produced by the failure it is meant to catch needs a liveness precondition, or it is a check that
+a crash can pass.
+
+And the second half: **yellow is where the missing fact hides.** 1,182 postures carried an empty
+fail set and the verdict YELLOW. Yellow reads as *a bit off, probably theirs*; it does not read as
+*nothing is listening*. The contract had no term for "the thing is up", so nothing failed.
 
 **A directive is a product term, and its failure is silent.** `http2 on;` landed in nginx 1.25.1.
 On 1.22 it is not a configuration warning, it is `emerg`, and the service does not start. A
