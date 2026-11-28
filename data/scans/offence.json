@@ -1,0 +1,24 @@
+{
+  "measured_at": "2026-11-15",
+  "target": "the raw wildcard adhd",
+  "verdict": "offense",
+  "exit": 2,
+  "flagRecovered": true,
+  "vectors": [
+    "gh.run"
+  ],
+  "reached": [
+    "gh",
+    "proxy-ssrf"
+  ],
+  "cost": {
+    "calls": 5,
+    "seconds": 0.7
+  },
+  "reading": [
+    "the read is a file read, not a tool listing",
+    "the credential is the peer's, not the caller's",
+    "the proxy is SSRF",
+    "the bind is the offense; the URL only looks local"
+  ]
+}

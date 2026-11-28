@@ -28,6 +28,15 @@ under `data/ocd/` with a SHA-256 per file; `scripts/ocd-data.mjs` refuses a file
 its manifest and writes `src/data/ocd.json`, and the freshness gate refuses a corpus page that
 cannot state its snapshot.
 
+## The scan receipt
+
+`/scans` is the same shape for the exposure and protection scans: the eight-dimension
+exposure rubric and the protection board, frozen under `data/scans/` with a SHA-256 per
+file. `scripts/scan-data.mjs` verifies the files before writing `src/data/scans.json`, and
+`npm run build` stops on a mismatch. The scores are the defence of the stacked isotope
+design — 78 for the raw wildcard edge, 19–25 for the stacked edge, and the 5-enforced /
+3-gap mix that says where it is not done.
+
 ## Build
 
 ```sh

@@ -188,6 +188,8 @@ for (const file of contentFiles) {
 const knownRoutes = new Set([
   '/',
   '/charts',
+  '/corpus',
+  '/scans',
   '/universes',
   '/design',
   '/palette',

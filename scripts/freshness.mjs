@@ -56,6 +56,23 @@ if (existsSync(corpusPath)) {
   failures += 1
 }
 
+// --- 1c. the scan receipt carries its own snapshot and source hash ---------
+const scansPath = join('src', 'data', 'scans.json')
+let scansSnapshot = null
+if (existsSync(scansPath)) {
+  const scans = JSON.parse(readFileSync(scansPath, 'utf8'))
+  scansSnapshot = scans.snapshot
+  if (!scansSnapshot || !scans.sourceHash) {
+    console.error('freshness: scans.json has no snapshot or source hash — the receipt is unattributable')
+    failures += 1
+  } else {
+    console.log(`freshness: scans ${scansSnapshot}, source ${scans.sourceHash}`)
+  }
+} else {
+  console.error('freshness: src/data/scans.json is missing — run `npm run scans`')
+  failures += 1
+}
+
 // --- 2. the page says what snapshot it was built from ---------------------
 const dist = valueOf('--require-stamp')
 if (dist) {
@@ -84,6 +101,20 @@ if (dist) {
     if (!states) {
       console.error(
         'freshness: the corpus page does not state its snapshot — a measurement without its date is a claim',
+      )
+      failures += 1
+    }
+  }
+  const scansPage = join(dist, 'scans', 'index.html')
+  if (!existsSync(scansPage)) {
+    console.error(`freshness: ${scansPage} is missing — build before checking the scans stamp`)
+    failures += 1
+  } else {
+    const html = readFileSync(scansPage, 'utf8')
+    const states = html.includes('Snapshot') && (!scansSnapshot || html.includes(String(scansSnapshot)))
+    if (!states) {
+      console.error(
+        'freshness: the scans page does not state its snapshot — a score without its date is a claim',
       )
       failures += 1
     }

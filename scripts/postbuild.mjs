@@ -57,6 +57,7 @@ const sectionDirs = (await readdir(CONTENT, { withFileTypes: true }))
 const routes = [
   'charts',
   'corpus',
+  'scans',
   'universes',
   'design',
   'palette',
@@ -104,6 +105,7 @@ const titleFor = (route) => {
   if (pageTitles.has(route)) return `${pageTitles.get(route)} · le.critic`
   if (route === 'charts') return 'Charts · le.critic'
   if (route === 'corpus') return 'Corpus · le.critic'
+  if (route === 'scans') return 'Scans · le.critic'
   if (route === 'universes') return 'The universe · le.critic'
   if (route === 'design') return 'Design · le.critic'
   if (route === 'palette') return 'Colour · le.critic'
@@ -329,6 +331,7 @@ lines.push(
   `- [Isotopes](${SITE}/isotopes/what-is-an-isotope/): minimal systems you can lift.`,
   `- [Charts](${SITE}/charts/): the report as model-vs-observed curves.`,
   `- [Corpus](${SITE}/corpus/): the measured corpus — rework, inputs, collisions, leftovers.`,
+  `- [Scans](${SITE}/scans/): the exposure and protection scans as a hashed receipt.`,
   `- [Universe](${SITE}/universes/): the run as local-time segments and keyframes.`,
   `- [Design](${SITE}/design/): every component in use, live.`,
   `- Static artifacts with no application: [no script](${SITE}/nojs/), [no stylesheet](${SITE}/bare/), [the offline deck](${SITE}/deck.html).`,

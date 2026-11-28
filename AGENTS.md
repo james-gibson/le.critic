@@ -32,6 +32,18 @@ prose in `src/content/` explains it.
   manifest, run `npm run build`. Never edit `src/data/ocd.json`.
 - The freshness gate checks the corpus stamp as well as the charts stamp.
 
+## The scans are a receipt
+
+`/scans` is the same pattern for the exposure and protection scans, vendored under
+`data/scans/` with a SHA-256 per file in `data/scans/manifest.json`.
+
+- `scripts/scan-data.mjs` verifies every file against the manifest, then writes
+  `src/data/scans.json`. A hand-edited score stops the build.
+- To refresh: regenerate the three files with the tools that produced them (the exposure
+  rubric, fire-marshall, the flag test), copy them into `data/scans/`, rewrite the manifest,
+  run `npm run build`. Never edit `src/data/scans.json`.
+- The freshness gate checks the scans stamp as well as the charts and corpus stamps.
+
 ## Commands
 
 ```sh
@@ -41,6 +53,7 @@ npm run rules              # catch-up check on the vendored rules; writes nothin
 npm run build              # model → summary + universe, tsc, vite, shells, guards
 npm run check              # tsc --noEmit
 npm run corpus             # regenerate src/data/ocd.json from data/ocd/
+npm run scans              # regenerate src/data/scans.json from data/scans/
 npm run guard              # the publish guard alone
 npm run smoke              # render every route
 ```

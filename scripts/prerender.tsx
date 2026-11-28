@@ -24,6 +24,7 @@ const routes = [
   { file: 'home', path: '/' },
   { file: 'charts', path: '/charts' },
   { file: 'corpus', path: '/corpus' },
+  { file: 'scans', path: '/scans' },
   { file: 'universes', path: '/universes' },
   { file: 'design', path: '/design' },
   { file: 'palette', path: '/palette' },

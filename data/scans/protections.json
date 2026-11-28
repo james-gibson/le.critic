@@ -1,0 +1,54 @@
+{
+  "measured_at": "2026-11-27",
+  "source": "fire-marshall catalogue/protections.yaml",
+  "catalogue": {
+    "rows": 63,
+    "family": 9,
+    "tools": 13,
+    "kinds": 11
+  },
+  "statuses": {
+    "enforced": 31,
+    "declared": 23,
+    "gap": 8,
+    "unknown": 1
+  },
+  "edge": [
+    {
+      "id": "wan-ingress.bind",
+      "status": "enforced"
+    },
+    {
+      "id": "wan-ingress.token",
+      "status": "enforced"
+    },
+    {
+      "id": "wan-ingress.agreement",
+      "status": "enforced"
+    },
+    {
+      "id": "wan-ingress.border",
+      "status": "enforced"
+    },
+    {
+      "id": "wan-ingress.rate",
+      "status": "gap"
+    },
+    {
+      "id": "wan-ingress.attribution",
+      "status": "gap"
+    },
+    {
+      "id": "wan-ingress.tls",
+      "status": "gap"
+    },
+    {
+      "id": "skillz.readonly",
+      "status": "enforced"
+    }
+  ],
+  "edgeMix": {
+    "enforced": 5,
+    "gap": 3
+  }
+}

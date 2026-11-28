@@ -1,0 +1,14 @@
+{
+  "captured_at": "2026-11-27",
+  "files": {
+    "exposure.json": {
+      "sha256": "05c89c2e73b4d9ef6845c8643695ad5b3d9f24b32672c6969db830de2cba3b93"
+    },
+    "protections.json": {
+      "sha256": "e0162bae71312e3f49bdc1d00ef6725fe7cc04d635cda027ed1be9a755ac7dfa"
+    },
+    "offence.json": {
+      "sha256": "a63a5d7ebf90edfdd15429a38e5cc22658459353126827c7f41f3a994be9e057"
+    }
+  }
+}

@@ -8,6 +8,7 @@ import { Design } from './pages/Design'
 import { DocPage } from './pages/DocPage'
 import { Home } from './pages/Home'
 import { NotFound } from './pages/NotFound'
+import { Scans } from './pages/Scans'
 import { SectionIndex } from './pages/SectionIndex'
 import { Universes } from './pages/Universes'
 
@@ -35,6 +36,7 @@ export function App() {
         <Route index element={<Home />} />
         <Route path="charts" element={<Charts />} />
         <Route path="corpus" element={<Corpus />} />
+        <Route path="scans" element={<Scans />} />
         <Route path="universes" element={<Universes />} />
         <Route path="design" element={<Design />} />
         <Route path="palette" element={<Colour />} />
